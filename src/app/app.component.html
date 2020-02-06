@@ -1,0 +1,68 @@
+<div class="container-fluid">
+  <h1>Registration Forms</h1>
+  <form [formGroup]="registrationForm" (ngSubmit) ="onSubmit()">
+      {{registrationForm.value | json}}
+
+    <div class="form-group">
+      <label for="">UserName</label>
+      <input type="text" class="form-control" formControlName="userName" 
+      [class.is-invalid]="userName.invalid && userName.touched">
+      <!-- <small class="text-danger" [class.d-none]="userName.valid || userName.untouched">UserName is required</small> -->
+    <div *ngIf="userName.invalid && userName.touched">
+      <small class="text-danger" *ngIf="userName.errors?.required">UserName is Required</small>
+      <small class="text-danger" *ngIf="userName.errors?.minlength">UserName must be minimum 3 length</small>
+      <small class="text-danger" *ngIf="userName.errors?.forbiddenName">{{userName.errors?.forbiddenName.value }} UserName not allowed</small>
+      
+    </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="">Email</label>
+        <button class="btn btn-secondary btn-sm m-2" type="button" (click)="addAlternateEmails()">Add Alternate Emails</button>
+        <input [class.is-invalid]="email.invalid && email.touched" type="email" class="form-control" formControlName="email">
+        <small class="text-danger" [class.d-none]="email.valid || email.untouched">Email is required</small>
+        <div  formArrayName="alternateEmails" *ngFor="let email of alternateEmails.controls;let i=index">
+          <input type="email" class="form-control my-1" [formControlName]="i">
+        </div>
+      </div>
+
+    <div class="form-group">
+      <label for="">Password</label>
+      <input type="password" class="form-control" formControlName="password">
+    </div>
+
+    <div class="form-group">
+      <label for="">Confirm Password</label>
+      <input type="password" class="form-control" formControlName="confirmPassword"
+      [class.is-invalid]="registrationForm.errors?.misMatch">
+      <small class="text-danger" *ngIf="registrationForm.errors?.misMatch">Password do not match</small>
+    </div>
+
+    <div formGroupName="address">
+
+      <div class="form-group">
+        <label for="">City</label>
+        <input type="text" class="form-control" formControlName="city">
+      </div>
+
+      <div class="form-group">
+        <label for="">State</label>
+        <input type="text" class="form-control" formControlName="state">
+      </div>
+
+      <div class="form-group">
+        <label for="">Postal Code</label>
+        <input type="text" class="form-control" formControlName="postal">
+      </div>
+
+    </div> 
+    <div class="form-check ml-3">
+      <input type="checkbox" class="form-check-input" formControlName="subscribe">
+      <label for="">Send me promotional offers</label>
+    </div>
+
+    <button class="btn btn-primary" type="submit" [disabled]="!registrationForm.valid">Register</button>
+    <button (click)="loadApiData()" class="btn btn-secondary ml-2" type="button">LoadAPIData</button>
+
+  </form>
+  </div>
